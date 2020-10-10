@@ -3,6 +3,8 @@ local PANEL = {}
 
 function PANEL:Init()
 	--self.spaces = 0
+	self.hovered_btn_width = 0
+	self.hovered_btn_alpha = 0
 end
 
 function PANEL:CreateButton(name, command, parent) -- internal
@@ -10,7 +12,7 @@ function PANEL:CreateButton(name, command, parent) -- internal
 	button:SetText(name)
 	button:SetCommand(command)
 	--button:SizeToContentsX(2)
-	button:SizeToContentsY(2)
+	button:SizeToContentsY(24)
 	
 	button:SetEnlarged(self.enlarged) -- this affects size!
 	
@@ -20,7 +22,7 @@ end
 function PANEL:AddOption(name, command)
 	local button = self:CreateButton(name, command, self)
 	
-	button:DockMargin(0, 0, 0, self.enlarged and 5 or -3)
+	--button:DockMargin(0, 0, 0, 0)
 	button:Dock(TOP)
 	
 	return button
@@ -61,7 +63,7 @@ function PANEL:AddSubOption(parent, name, command)
 	
 	self:PlaceSubPanel(button, parent)
 	
-	button:DockMargin(4, 0, 0, self.enlarged and 5 or -3)
+	button:DockMargin(4, 0, 0, 0)
 	button:Dock(TOP)
 	
 	return button
@@ -91,7 +93,7 @@ function PANEL:AddSelectableOption(selector, name, command)
 	
 	button:SetSelectable(true)
 	
-	button:DockMargin(0, 0, 0, self.enlarged and 5 or -3)
+	--button:DockMargin(0, 0, 0, 0)
 	button:Dock(TOP)
 	
 	return button
@@ -120,13 +122,38 @@ function PANEL:SetEnlarged(state)
 		if v.SetEnlarged then
 			v:SetEnlarged(state)
 			
-			if v.SetText then -- FIXME
-				v:DockMargin(0, 0, 0, state and 5 or -3)
-			end
+			--if v.SetText then -- FIXME
+				--v:DockMargin(0, 0, 0, 0)
+			--end
 		end
 	end
 	
 	self:InvalidateLayout(true)
+end
+
+function PANEL:Paint()
+	local btn = self.hovered_button
+	local alpha = self.hovered_btn_alpha
+
+	if IsValid(btn) and alpha > 0 then
+		local hovered = vgui.GetHoveredPanel() 
+		if IsValid(hovered) and not hovered.MenuButton then
+			self.hovered_btn_alpha = alpha - FrameTime() * 600
+		end
+
+		surface.SetDrawColor(197, 71, 133, alpha)
+		surface.SetFont(btn:GetFont())
+		local x, y = btn:GetPos()
+		local w, h = surface.GetTextSize(btn:GetText())
+
+		if not self.hovered_btn_y then
+			self.hovered_btn_y = y
+		end
+
+		self.hovered_btn_width = Lerp(FrameTime() * 10, self.hovered_btn_width, w)
+		self.hovered_btn_y = Lerp(FrameTime() * 16, self.hovered_btn_y, y)
+		surface.DrawRect(x, self.hovered_btn_y + 6, self.hovered_btn_width + 8, h)
+	end
 end
 
 vgui.Register("MenuOptions", PANEL, "Panel")

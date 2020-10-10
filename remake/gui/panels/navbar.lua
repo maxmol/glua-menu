@@ -69,7 +69,7 @@ function PANEL:AddWidget(widget_base) -- internal
 	local button = self:Add("WidgetButton")
 	button:SetupWidget(widget_base)
 	
-	button:DockMargin(3, 0, 0, 0)
+	button:DockMargin(8, 0, 0, 0)
 	button:Dock(RIGHT)
 end
 
@@ -108,8 +108,8 @@ function PANEL:InGameChanged(state)
 end
 
 function PANEL:Paint(w, h)
-	surface.SetDrawColor(0, 0, 0, 127)
-	surface.DrawRect(0, 0, w, h)
+	--surface.SetDrawColor(0, 0, 0, 127)
+	--surface.DrawRect(0, 0, w, h)
 end
 
 vgui.Register("NavigationBar", PANEL, "Panel")

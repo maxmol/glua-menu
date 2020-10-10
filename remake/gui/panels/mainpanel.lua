@@ -9,6 +9,14 @@ function PANEL:Init()
 	if gui.IsConsoleVisible() then -- костыль
 		RunConsoleCommand("showconsole")
 	end
+
+	self.HTML = vgui.Create("DHTML", self)
+	self.HTML:SetSize(ScrW(), ScrH())
+	self.HTML:SetHTML(MenuBackgroundHTML)
+
+	hook.Add("InGameStateChanged", 'BackgroundHTML', function(state)
+		self.HTML:SetVisible(not state)
+	end)
 	
 	self.UpperBar = self:Add("UpperBar")
 	self.UpperBar:SetHeight(30)
@@ -28,9 +36,11 @@ function PANEL:Init()
 	self.NavBar:Dock(BOTTOM)
 	self.Menu:Dock(LEFT)
 	
-	hook.Add("CurrentGamemodeChanged", self, self.OnGamemodeChanged)
+	--hook.Add("CurrentGamemodeChanged", self, self.OnGamemodeChanged)
 	
-	self:OnGamemodeChanged(engine.ActiveGamemode())
+	--self:OnGamemodeChanged(engine.ActiveGamemode())
+
+	self.GMLogo:SetVisible(false)
 end
 
 function PANEL:PerformLayout(w, h)
@@ -86,7 +96,7 @@ function PANEL:OnGamemodeChanged(gamemode_name)
 	end
 end
 
-PANEL.Paint = DrawBackground
+--PANEL.Paint = DrawBackground
 
 MainMenuView.MainPanelTable = vgui.RegisterTable(PANEL, "EditablePanel")
 

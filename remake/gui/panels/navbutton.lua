@@ -27,6 +27,7 @@ function PANEL:Init()
 	self:SetFont("Menu_ControlButton")
 	
 	self:SetText("")
+	self.sat = 230
 end
 
 function PANEL:PerformLayout()
@@ -105,15 +106,20 @@ end
 PANEL.SetIcon = PANEL.SetImage
 
 function PANEL:Paint(w, h)
+	local sat
 	if self:IsDown() then
-		draw.RoundedBox(6, 0, 0, w, h, color_white)
-		draw.RoundedBox(4, 1, 1, w - 2, h - 2, col_pressed)
-	--[[elseif self:IsHovered() then
-		draw.RoundedBox(6, 0, 0, w, h, color_black)--col_hovered_outline)
-		draw.RoundedBox(4, 1, 1, w - 2, h - 2, color_white)]]
+		sat = 40
+	elseif self:IsHovered() then
+		sat = 64
 	else
-		draw.RoundedBox(6, 0, 0, w, h, color_white)
+		sat = 240
 	end
+
+	sat = Lerp(FrameTime()*20, self.sat, sat)
+	self.sat = sat
+
+	local clr = Color(sat, sat, sat)
+	draw.RoundedBox(20, 0, 0, w, h, clr)
 end
 
 vgui.Register("ControlButton", PANEL, "DButton")

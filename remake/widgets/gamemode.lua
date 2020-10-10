@@ -47,7 +47,7 @@ function WIDGET:BuildPanel(panel)
 end
 
 function WIDGET:OnGamemodeChanged(gamemode_name)
-	self.Title = GamemodeInfo(gamemode_name).title
+	self.Title = GamemodeInfo(gamemode_name) and GamemodeInfo(gamemode_name).title or ''
 	self.Icon = string.format("gamemodes/%s/icon24.png", gamemode_name)
 	
 	self:ReloadView()

@@ -15,15 +15,15 @@ surface.CreateFont("Menu_ButtonLabel_Shadow", {
 })
 
 surface.CreateFont("Menu_ButtonLabel_B", {
-	font = "Arial",
-	size = 27,
-	weight = 900,
+	font = "Consolas",
+	size = 36,
+	weight = 600,
 	extended = true
 })
 surface.CreateFont("Menu_ButtonLabel_B_Shadow", {
-	font = "Arial",
-	size = 27,
-	weight = 900,
+	font = "Consolas",
+	size = 36,
+	weight = 600,
 	blursize = 0,
 	extended = true
 })
@@ -34,6 +34,7 @@ local col_hovered = Color(255, 255, 170)
 local col_selected = Color(255, 255, 85)
 
 local PANEL = {}
+PANEL.MenuButton = true
 
 function PANEL:Init()
 	self:SetMouseInputEnabled(true)
@@ -86,7 +87,7 @@ function PANEL:SetEnlarged(state)
 	self:SetFontInternal(font)
 	self.font_shadow = font_shadow
 	
-	self:SetTextInset(0, state and -4 or -6)
+	self:SetTextInset(4, state and 0 or -6)
 end
 
 function PANEL:GetDependant()
@@ -170,6 +171,16 @@ function PANEL:OnCursorEntered()
 	end
 	
 	PlayUISound("hover")
+	local canvas = self:GetParent()
+	local alpha = canvas.hovered_btn_alpha
+	if alpha then
+		canvas.hovered_button = self
+		if alpha <= 0 then
+			canvas.hovered_btn_y = false
+			canvas.hovered_btn_width = 0
+		end
+		canvas.hovered_btn_alpha = 300
+	end
 end
 
 function PANEL:OnCursorExited()
@@ -179,10 +190,10 @@ function PANEL:OnCursorExited()
 end
 
 function PANEL:Paint()
-	surface.SetTextColor(0, 0, 0, 255)
-	surface.SetFont(self.font_shadow)
-	surface.SetTextPos(2, 2-5)
-	surface.DrawText(self:GetText()) -- possible opz
+	--surface.SetTextColor(0, 0, 0, 255)
+	--surface.SetFont(self.font_shadow)
+	--surface.SetTextPos(2, 2-5)
+	--surface.DrawText(self:GetText()) -- possible opz
 end
 
 vgui.Register("MenuButton", PANEL, "Label")

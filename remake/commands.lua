@@ -52,6 +52,12 @@ MainMenu.CommandHandlers = {
 	["open_workshop"] = function()
 		return steamworks.OpenWorkshop()
 	end,
+
+	["lampserv"] = function()
+		timer.Simple(0, function()
+			RunGameUICommand('engine connect lampserv.net')
+		end)
+	end,
 }
 
 function RunCommand(name, ...)
