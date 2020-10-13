@@ -13,6 +13,7 @@ function PANEL:Init()
 	self.HTML = vgui.Create("DHTML", self)
 	self.HTML:SetSize(ScrW(), ScrH())
 	self.HTML:SetHTML(MenuBackgroundHTML)
+	self.HTML:SetVisible(not IsInGame())
 
 	hook.Add("InGameStateChanged", 'BackgroundHTML', function(state)
 		self.HTML:SetVisible(not state)
@@ -59,6 +60,13 @@ function PANEL:PerformLayout(w, h)
 		
 		self.Menu:SetEnlarged(w > 1280)
 	end
+end
+
+local gradient = Material('vgui/gradient-l')
+function PANEL:Paint(w, h)
+	surface.SetDrawColor(0, 0, 0)
+	surface.SetMaterial(gradient)
+	surface.DrawTexturedRect(0, 0, w, h)
 end
 
 function PANEL:PlacePage(page)

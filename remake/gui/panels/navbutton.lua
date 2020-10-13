@@ -119,7 +119,7 @@ function PANEL:Paint(w, h)
 	self.sat = sat
 
 	local clr = Color(sat, sat, sat)
-	draw.RoundedBox(20, 0, 0, w, h, clr)
+	draw.RoundedBox(32, 0, 0, w, h, clr)
 end
 
 vgui.Register("ControlButton", PANEL, "DButton")
